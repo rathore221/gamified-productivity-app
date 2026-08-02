@@ -46,7 +46,6 @@ export async function GET(
   const currentWeekStart = getCurrentWeekStart()
   const effectiveWeeklyXp = friend.weekStart < currentWeekStart ? 0 : friend.weeklyXp
 
-  // All-time record for this friend, across every opponent they've faced.
   const allTimeChallenges = await prisma.challenge.findMany({
     where: {
       status: { in: ["COMPLETED", "SURRENDERED"] },
@@ -54,13 +53,14 @@ export async function GET(
     },
     select: { winnerId: true, challengerId: true, opponentId: true },
   })
-  const allTimeWins = allTimeChallenges.filter((c) => c.winnerId === friendId).length
+  const allTimeWins = allTimeChallenges.filter(
+    (c: (typeof allTimeChallenges)[number]) => c.winnerId === friendId
+  ).length
   const allTimeLosses = allTimeChallenges.filter(
-    (c) => c.winnerId && c.winnerId !== friendId
+    (c: (typeof allTimeChallenges)[number]) => c.winnerId && c.winnerId !== friendId
   ).length
   const allTimeTies = allTimeChallenges.length - allTimeWins - allTimeLosses
 
-  // Head-to-head record + full duel list vs the viewer, each with its tasks.
   const headToHead = await prisma.challenge.findMany({
     where: {
       status: { in: ["COMPLETED", "SURRENDERED", "DECLINED"] },
@@ -79,9 +79,15 @@ export async function GET(
     },
   })
 
-  const resolvedH2H = headToHead.filter((c) => c.status !== "DECLINED")
-  const wins = resolvedH2H.filter((c) => c.winnerId === me.id).length
-  const losses = resolvedH2H.filter((c) => c.winnerId === friendId).length
+  const resolvedH2H = headToHead.filter(
+    (c: (typeof headToHead)[number]) => c.status !== "DECLINED"
+  )
+  const wins = resolvedH2H.filter(
+    (c: (typeof resolvedH2H)[number]) => c.winnerId === me.id
+  ).length
+  const losses = resolvedH2H.filter(
+    (c: (typeof resolvedH2H)[number]) => c.winnerId === friendId
+  ).length
   const ties = resolvedH2H.length - wins - losses
 
   return NextResponse.json({
@@ -97,7 +103,7 @@ export async function GET(
     friendshipId: friendship.id,
     allTimeRecord: { wins: allTimeWins, losses: allTimeLosses, ties: allTimeTies, total: allTimeChallenges.length },
     headToHeadRecord: { wins, losses, ties, total: resolvedH2H.length },
-    headToHeadDuels: headToHead.map((c) => ({
+    headToHeadDuels: headToHead.map((c: (typeof headToHead)[number]) => ({
       id: c.id,
       category: c.category,
       wagerXP: c.wagerXP,
