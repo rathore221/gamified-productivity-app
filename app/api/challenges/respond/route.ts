@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server"
 import { auth } from "@clerk/nextjs/server"
 import { prisma } from "@/lib/prisma"
+import { ChallengeDuration } from "@prisma/client"
 
-const DURATION_MS = {
+const DURATION_MS: Record<ChallengeDuration, number> = {
   ONE_DAY: 24 * 60 * 60 * 1000,
   ONE_WEEK: 7 * 24 * 60 * 60 * 1000,
 }
