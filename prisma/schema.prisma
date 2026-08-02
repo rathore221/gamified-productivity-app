@@ -1,0 +1,134 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id          String       @id @default(cuid())
+  clerkId     String       @unique
+  email       String       @unique
+  name        String?
+  imageUrl    String?
+  xp          Int          @default(0)
+  weeklyXp    Int          @default(0)
+  weekStart   DateTime     @default(now())
+  level       Int          @default(1)
+  trophiesCount Int        @default(0)
+  createdAt   DateTime     @default(now())
+
+  tasks             Task[]
+  xpLogs            XpLog[]
+  sentRequests      Friendship[] @relation("Requester")
+  receivedRequests  Friendship[] @relation("Receiver")
+
+  challengesSent      Challenge[] @relation("Challenger")
+  challengesReceived  Challenge[] @relation("Opponent")
+  challengesWon       Challenge[] @relation("Winner")
+
+  @@index([xp])
+  @@index([weeklyXp])
+}
+
+model Challenge {
+  id            String           @id @default(cuid())
+  challengerId  String
+  opponentId    String
+  status        ChallengeStatus  @default(PENDING)
+  category      String
+  duration      ChallengeDuration
+  wagerXP       Int
+  startDate     DateTime?
+  endDate       DateTime?
+  winnerId      String?
+  challengerXP  Int              @default(0)
+  opponentXP    Int              @default(0)
+  createdAt     DateTime         @default(now())
+
+  challenger User  @relation("Challenger", fields: [challengerId], references: [id], onDelete: Cascade)
+  opponent   User  @relation("Opponent", fields: [opponentId], references: [id], onDelete: Cascade)
+  winner     User? @relation("Winner", fields: [winnerId], references: [id], onDelete: SetNull)
+
+  tasks Task[]
+
+  @@index([challengerId, status])
+  @@index([opponentId, status])
+  @@index([status, endDate])
+}
+
+enum ChallengeStatus {
+  PENDING
+  ACTIVE
+  COMPLETED
+  DECLINED
+  SURRENDERED
+}
+
+enum ChallengeDuration {
+  ONE_DAY
+  ONE_WEEK
+}
+
+model Friendship {
+  id          String            @id @default(cuid())
+  requesterId String
+  receiverId  String
+  status      FriendshipStatus  @default(PENDING)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  requester User @relation("Requester", fields: [requesterId], references: [id], onDelete: Cascade)
+  receiver  User @relation("Receiver", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@unique([requesterId, receiverId])
+  @@index([requesterId, status])
+  @@index([receiverId, status])
+}
+
+enum FriendshipStatus {
+  PENDING
+  ACCEPTED
+  BLOCKED
+}
+
+model Task {
+  id            String    @id @default(cuid())
+  title         String
+  durationSec   Int
+  status        TaskStatus @default(ACTIVE)
+  xpAwarded     Int?
+  createdAt     DateTime  @default(now())
+  completedAt   DateTime?
+
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  challengeId   String?
+  challenge     Challenge? @relation(fields: [challengeId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([challengeId])
+}
+
+enum TaskStatus {
+  ACTIVE
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+model XpLog {
+  id        String   @id @default(cuid())
+  amount    Int
+  reason    String
+  createdAt DateTime @default(now())
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
