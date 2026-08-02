@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server"
 import { auth } from "@clerk/nextjs/server"
 import { prisma } from "@/lib/prisma"
-import { ChallengeDuration } from "@prisma/client"
 
-const DURATION_MS: Record<ChallengeDuration, number> = {
+const DURATION_MS: Record<"ONE_DAY" | "ONE_WEEK", number> = {
   ONE_DAY: 24 * 60 * 60 * 1000,
   ONE_WEEK: 7 * 24 * 60 * 60 * 1000,
 }
@@ -37,7 +36,8 @@ export async function PATCH(req: Request) {
   }
 
   const startDate = new Date()
-  const endDate = new Date(startDate.getTime() + DURATION_MS[challenge.duration])
+  const durationKey = challenge.duration as "ONE_DAY" | "ONE_WEEK"
+  const endDate = new Date(startDate.getTime() + DURATION_MS[durationKey])
 
   const updated = await prisma.challenge.update({
     where: { id: challengeId },
