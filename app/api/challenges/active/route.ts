@@ -22,9 +22,9 @@ export async function GET() {
     orderBy: { createdAt: "desc" },
   })
 
-  const pending = all.filter((c) => c.status === "PENDING")
-  const active = all.filter((c) => c.status === "ACTIVE")
-  const completed = all.filter((c) =>
+  const pending = all.filter((c: (typeof all)[number]) => c.status === "PENDING")
+  const active = all.filter((c: (typeof all)[number]) => c.status === "ACTIVE")
+  const completed = all.filter((c: (typeof all)[number]) =>
     ["COMPLETED", "DECLINED", "SURRENDERED"].includes(c.status)
   )
 
