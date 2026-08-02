@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server"
 import { auth } from "@clerk/nextjs/server"
 import { prisma } from "@/lib/prisma"
-import { Prisma } from "@prisma/client"
 import { calculateXpReward, levelFromXp } from "@/lib/xp"
 import { getCurrentWeekStart } from "@/lib/week"
 
@@ -41,37 +40,30 @@ export async function POST(
     if (!isParticipant) challenge = null
   }
 
-  const ops: Prisma.PrismaPromise<unknown>[] = [
-    prisma.task.update({
-      where: { id },
-      data: { status: "COMPLETED", completedAt: new Date(), xpAwarded },
-    }),
-    prisma.user.update({
-      where: { id: user.id },
-      data: {
-        xp: { increment: xpAwarded },
-        weeklyXp: newWeeklyXp,
-        weekStart: weekNeedsReset ? currentWeekStart : user.weekStart,
-        level: levelFromXp(newTotalXp),
-      },
-    }),
-  ]
+  const updatedTask = await prisma.task.update({
+    where: { id },
+    data: { status: "COMPLETED", completedAt: new Date(), xpAwarded },
+  })
+
+  const updatedUser = await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      xp: { increment: xpAwarded },
+      weeklyXp: newWeeklyXp,
+      weekStart: weekNeedsReset ? currentWeekStart : user.weekStart,
+      level: levelFromXp(newTotalXp),
+    },
+  })
 
   if (challenge) {
     const isChallenger = challenge.challengerId === user.id
-    ops.push(
-      prisma.challenge.update({
-        where: { id: challenge.id },
-        data: isChallenger
-          ? { challengerXP: { increment: xpAwarded } }
-          : { opponentXP: { increment: xpAwarded } },
-      })
-    )
+    await prisma.challenge.update({
+      where: { id: challenge.id },
+      data: isChallenger
+        ? { challengerXP: { increment: xpAwarded } }
+        : { opponentXP: { increment: xpAwarded } },
+    })
   }
-
-  const results = await prisma.$transaction(ops)
-  const updatedTask = results[0] as Awaited<ReturnType<typeof prisma.task.update>>
-  const updatedUser = results[1] as Awaited<ReturnType<typeof prisma.user.update>>
 
   await prisma.xpLog.create({
     data: { userId: user.id, amount: xpAwarded, reason: `Completed: ${task.title}` },
