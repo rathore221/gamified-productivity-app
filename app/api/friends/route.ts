@@ -20,7 +20,9 @@ export async function GET() {
     },
   })
 
-  const friends = accepted.map((f) => (f.requesterId === me.id ? f.receiver : f.requester))
+  const friends = accepted.map(
+    (f: (typeof accepted)[number]) => (f.requesterId === me.id ? f.receiver : f.requester)
+  )
 
   const incomingRequests = await prisma.friendship.findMany({
     where: { receiverId: me.id, status: "PENDING" },
@@ -32,7 +34,7 @@ export async function GET() {
 
   return NextResponse.json({
     friends,
-    incomingRequests: incomingRequests.map((r) => ({
+    incomingRequests: incomingRequests.map((r: (typeof incomingRequests)[number]) => ({
       friendshipId: r.id,
       user: r.requester,
     })),
