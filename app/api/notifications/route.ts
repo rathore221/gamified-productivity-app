@@ -26,11 +26,11 @@ export async function GET() {
   })
 
   return NextResponse.json({
-    friendRequests: friendRequests.map((r) => ({
+    friendRequests: friendRequests.map((r: (typeof friendRequests)[number]) => ({
       friendshipId: r.id,
       user: r.requester,
     })),
-    challengeRequests: challengeRequests.map((c) => ({
+    challengeRequests: challengeRequests.map((c: (typeof challengeRequests)[number]) => ({
       challengeId: c.id,
       category: c.category,
       duration: c.duration,
