@@ -44,7 +44,7 @@ export async function GET(req: Request) {
     },
   })
 
-  const effective = users.map((u) => ({
+  const effective = users.map((u: (typeof users)[number]) => ({
     id: u.id,
     name: u.name,
     imageUrl: u.imageUrl,
