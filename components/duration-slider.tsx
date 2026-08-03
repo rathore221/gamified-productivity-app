@@ -33,7 +33,6 @@ export function DurationSlider({ minutes, onChange }: DurationSliderProps) {
       </div>
 
       <div className="relative pt-1 pb-2">
-        {/* Track */}
         <div className="relative h-2 rounded-full bg-zinc-800">
           <div
             className="absolute h-full rounded-full bg-gradient-to-r from-purple-500 to-fuchsia-400 shadow-[0_0_10px_2px_rgba(168,85,247,0.5)] transition-all"
@@ -41,14 +40,15 @@ export function DurationSlider({ minutes, onChange }: DurationSliderProps) {
           />
         </div>
 
-        {/* Tick marks for presets */}
         <div className="absolute inset-x-0 top-1 h-2 pointer-events-none">
           {PRESETS.map((p) => (
             <div
               key={p}
-              className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-1.5 w-1.5 rounded-full transition-colors ${
-                minutes >= p ? "bg-white/70" : "bg-zinc-600"
-              }`}
+              className={
+                minutes >= p
+                  ? "absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-1.5 w-1.5 rounded-full transition-colors bg-white/70"
+                  : "absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-1.5 w-1.5 rounded-full transition-colors bg-zinc-600"
+              }
               style={{ left: `${Math.min(100, (p / MAX) * 100)}%` }}
             />
           ))}
@@ -63,7 +63,6 @@ export function DurationSlider({ minutes, onChange }: DurationSliderProps) {
           className="absolute inset-x-0 top-1 h-2 w-full opacity-0 cursor-pointer"
         />
 
-        {/* Custom thumb */}
         <div
           className="absolute top-1 -translate-y-1/2 -translate-x-1/2 pointer-events-none transition-all"
           style={{ left: `${percent}%` }}
@@ -81,3 +80,15 @@ export function DurationSlider({ minutes, onChange }: DurationSliderProps) {
             key={p}
             onClick={() => onChange(p)}
             className={
+              minutes === p
+                ? "px-3 py-1 rounded-full text-xs font-bold transition-all bg-purple-600 text-white shadow-[0_0_10px_rgba(168,85,247,0.4)]"
+                : "px-3 py-1 rounded-full text-xs font-bold transition-all bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200"
+            }
+          >
+            {formatDuration(p)}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
