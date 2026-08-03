@@ -6,13 +6,15 @@ import { usePathname } from "next/navigation"
 import { UserButton, SignInButton, Show } from "@clerk/nextjs"
 import { Button } from "@/components/ui/button"
 import { Logo } from "@/components/logo"
-import { LayoutDashboard, Trophy, Users, Info, BookOpen, Bell, History } from "lucide-react"
+import { LayoutDashboard, Trophy, Users, Info, BookOpen, Bell, History, Archive } from "lucide-react"
+
 
 const NAV_LINKS = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/leaderboard", label: "Leaderboard", icon: Trophy },
   { href: "/friends", label: "Friends", icon: Users },
   { href: "/history", label: "History", icon: History },
+  { href: "/archive", label: "Archive", icon: Archive },
 ]
 
 export function NavBar() {

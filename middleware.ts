@@ -15,6 +15,8 @@ const isProtectedRoute = createRouteMatcher([
 "/api/notifications(.*)",
 "/api/tasks/history(.*)",
 "/api/friends/(.*)/(.*)",
+"/archive(.*)",
+"/api/tasks/archive(.*)",
 ])
 
 export default clerkMiddleware(async (auth, req) => {
