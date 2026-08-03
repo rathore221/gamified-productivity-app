@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { xpProgress } from "@/lib/xp"
 import { Zap, Plus, Flame, Calendar, Trophy, Swords } from "lucide-react"
+import { ChallengeSelect } from "@/components/challenge-select"
 
 interface Task {
   id: string
@@ -163,26 +164,12 @@ export default function DashboardPage() {
           <DurationSlider minutes={minutes} onChange={setMinutes} />
 
           {challengeOptions.length > 0 && (
-            <div className="space-y-1.5">
-              <div className="flex items-center gap-2 text-zinc-400">
-                <Swords size={14} />
-                <span className="text-xs uppercase tracking-wider font-semibold">Challenge</span>
-              </div>
-              <select
-                value={selectedChallengeId}
-                onChange={(e) => setSelectedChallengeId(e.target.value)}
-                className="w-full bg-zinc-950 border border-zinc-800 rounded-lg p-2.5 text-sm text-zinc-300"
-              >
-                <option value="">Don't count toward a challenge</option>
-                {challengeOptions.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.category} vs {c.opponent.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          )}
-
+  <ChallengeSelect
+    options={challengeOptions}
+    value={selectedChallengeId}
+    onChange={setSelectedChallengeId}
+  />
+)}
           <Button
             onClick={createTask}
             disabled={!title.trim()}
