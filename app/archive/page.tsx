@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react"
 import { Input } from "@/components/ui/input"
 import { getWeekStartFor, formatWeekLabel } from "@/lib/week"
-import { Search, Archive, ArrowUpDown, CheckCircle2 } from "lucide-react"
+import { Search, Archive, ArrowUpDown, CheckCircle2, TrendingUp, ListChecks, Clock } from "lucide-react"
 
 interface TaskRecord {
   id: string
@@ -14,11 +14,22 @@ interface TaskRecord {
 }
 
 type SortMode = "newest" | "oldest" | "xpHigh" | "xpLow"
+type RangeKey = "week" | "2weeks" | "month" | "6months" | "year" | "all"
+
+const RANGE_OPTIONS: { key: RangeKey; label: string; days: number | null }[] = [
+  { key: "week", label: "Past Week", days: 7 },
+  { key: "2weeks", label: "Past 2 Weeks", days: 14 },
+  { key: "month", label: "Past Month", days: 30 },
+  { key: "6months", label: "Past 6 Months", days: 182 },
+  { key: "year", label: "Past Year", days: 365 },
+  { key: "all", label: "All Time", days: null },
+]
 
 export default function ArchivePage() {
   const [tasks, setTasks] = useState<TaskRecord[]>([])
   const [query, setQuery] = useState("")
   const [sortMode, setSortMode] = useState<SortMode>("newest")
+  const [range, setRange] = useState<RangeKey>("month")
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -30,8 +41,28 @@ export default function ArchivePage() {
       })
   }, [])
 
+  const rangeCutoff = useMemo(() => {
+    const opt = RANGE_OPTIONS.find((r) => r.key === range)
+    if (!opt || opt.days === null) return null
+    const cutoff = new Date()
+    cutoff.setDate(cutoff.getDate() - opt.days)
+    return cutoff
+  }, [range])
+
+  const tasksInRange = useMemo(() => {
+    if (!rangeCutoff) return tasks
+    return tasks.filter((t) => new Date(t.completedAt) >= rangeCutoff)
+  }, [tasks, rangeCutoff])
+
+  const stats = useMemo(() => {
+    const totalTasks = tasksInRange.length
+    const totalXp = tasksInRange.reduce((sum, t) => sum + (t.xpAwarded ?? 0), 0)
+    const totalMinutes = tasksInRange.reduce((sum, t) => sum + Math.round(t.durationSec / 60), 0)
+    return { totalTasks, totalXp, totalMinutes }
+  }, [tasksInRange])
+
   const filteredAndSorted = useMemo(() => {
-    let result = tasks.filter((t) =>
+    let result = tasksInRange.filter((t) =>
       t.title.toLowerCase().includes(query.toLowerCase())
     )
 
@@ -49,7 +80,7 @@ export default function ArchivePage() {
     })
 
     return result
-  }, [tasks, query, sortMode])
+  }, [tasksInRange, query, sortMode])
 
   const groupedByWeek = useMemo(() => {
     const groups = new Map<string, TaskRecord[]>()
@@ -73,6 +104,48 @@ export default function ArchivePage() {
           Archive
         </h1>
 
+        {/* Stats card */}
+        <div className="rounded-2xl border border-zinc-800 bg-zinc-900/50 backdrop-blur-md p-4 space-y-4">
+          <div className="flex items-center gap-2 flex-wrap">
+            {RANGE_OPTIONS.map((opt) => (
+              <button
+                key={opt.key}
+                onClick={() => setRange(opt.key)}
+                className={
+                  range === opt.key
+                    ? "px-3 py-1.5 rounded-full text-xs font-bold bg-purple-600 text-white shadow-[0_0_10px_rgba(168,85,247,0.4)] transition-all"
+                    : "px-3 py-1.5 rounded-full text-xs font-bold bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200 transition-all"
+                }
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-3 gap-3">
+            <div className="rounded-xl bg-zinc-950/60 border border-zinc-800 p-3 text-center">
+              <ListChecks size={16} className="text-emerald-400 mx-auto mb-1.5" />
+              <p className="text-[10px] text-zinc-500 uppercase tracking-wide">Tasks</p>
+              <p className="text-lg font-bold text-white">{stats.totalTasks}</p>
+            </div>
+            <div className="rounded-xl bg-zinc-950/60 border border-zinc-800 p-3 text-center">
+              <TrendingUp size={16} className="text-purple-400 mx-auto mb-1.5" />
+              <p className="text-[10px] text-zinc-500 uppercase tracking-wide">XP Earned</p>
+              <p className="text-lg font-bold text-white">{stats.totalXp}</p>
+            </div>
+            <div className="rounded-xl bg-zinc-950/60 border border-zinc-800 p-3 text-center">
+              <Clock size={16} className="text-fuchsia-400 mx-auto mb-1.5" />
+              <p className="text-[10px] text-zinc-500 uppercase tracking-wide">Time Focused</p>
+              <p className="text-lg font-bold text-white">
+                {stats.totalMinutes >= 60
+                  ? `${Math.floor(stats.totalMinutes / 60)}h ${stats.totalMinutes % 60}m`
+                  : `${stats.totalMinutes}m`}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Search + sort */}
         <div className="rounded-2xl border border-zinc-800 bg-zinc-900/50 backdrop-blur-md p-4 space-y-3">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" size={16} />
@@ -115,7 +188,7 @@ export default function ArchivePage() {
           <div className="rounded-2xl border border-dashed border-zinc-800 py-16 text-center">
             <Archive className="mx-auto mb-3 text-zinc-700" size={32} />
             <p className="text-sm text-zinc-500 font-medium">
-              {query ? "No tasks match your search" : "No completed tasks yet"}
+              {query ? "No tasks match your search" : "No completed tasks in this range"}
             </p>
           </div>
         )}
