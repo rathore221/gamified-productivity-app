@@ -42,62 +42,70 @@ export default function LeaderboardPage() {
   const users = tab === "weekly" ? weekly : allTime
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+    <div className="min-h-screen bg-slate-950 text-slate-100">
       <div className="max-w-2xl mx-auto p-6 space-y-6">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-black tracking-wide flex items-center gap-2">
-            <Trophy className="text-yellow-400" size={24} />
+          <h1 className="text-xl font-semibold tracking-tight flex items-center gap-2">
+            <Trophy className="text-amber-400" size={22} />
             Leaderboard
           </h1>
           {tab === "weekly" && resetsAt && <ResetCountdown resetsAt={resetsAt} />}
         </div>
 
         <div className="flex items-center justify-between flex-wrap gap-2">
-          <div className="flex gap-2 rounded-xl border border-zinc-800 bg-zinc-900/50 p-1 w-fit">
+          <div className="flex gap-1 rounded-lg border border-slate-800 bg-slate-900/60 p-1 w-fit">
             <button
               onClick={() => setTab("weekly")}
-              className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-colors ${
-                tab === "weekly" ? "bg-purple-600 text-white" : "text-zinc-400 hover:text-zinc-200"
-              }`}
+              className={
+                tab === "weekly"
+                  ? "px-4 py-1.5 rounded-md text-sm font-medium bg-indigo-600 text-white transition-colors"
+                  : "px-4 py-1.5 rounded-md text-sm font-medium text-slate-400 hover:text-slate-200 transition-colors"
+              }
             >
               This Week
             </button>
             <button
               onClick={() => setTab("allTime")}
-              className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-colors ${
-                tab === "allTime" ? "bg-purple-600 text-white" : "text-zinc-400 hover:text-zinc-200"
-              }`}
+              className={
+                tab === "allTime"
+                  ? "px-4 py-1.5 rounded-md text-sm font-medium bg-indigo-600 text-white transition-colors"
+                  : "px-4 py-1.5 rounded-md text-sm font-medium text-slate-400 hover:text-slate-200 transition-colors"
+              }
             >
               All Time
             </button>
           </div>
 
-          <div className="flex gap-2 rounded-xl border border-zinc-800 bg-zinc-900/50 p-1 w-fit">
+          <div className="flex gap-1 rounded-lg border border-slate-800 bg-slate-900/60 p-1 w-fit">
             <button
               onClick={() => setScope("global")}
-              className={`px-3 py-1.5 rounded-lg text-sm font-bold transition-colors flex items-center gap-1.5 ${
-                scope === "global" ? "bg-fuchsia-600 text-white" : "text-zinc-400 hover:text-zinc-200"
-              }`}
+              className={
+                scope === "global"
+                  ? "px-3 py-1.5 rounded-md text-sm font-medium bg-indigo-600 text-white transition-colors flex items-center gap-1.5"
+                  : "px-3 py-1.5 rounded-md text-sm font-medium text-slate-400 hover:text-slate-200 transition-colors flex items-center gap-1.5"
+              }
             >
-              <Globe size={14} /> Global
+              <Globe size={13} /> Global
             </button>
             <button
               onClick={() => setScope("friends")}
-              className={`px-3 py-1.5 rounded-lg text-sm font-bold transition-colors flex items-center gap-1.5 ${
-                scope === "friends" ? "bg-fuchsia-600 text-white" : "text-zinc-400 hover:text-zinc-200"
-              }`}
+              className={
+                scope === "friends"
+                  ? "px-3 py-1.5 rounded-md text-sm font-medium bg-indigo-600 text-white transition-colors flex items-center gap-1.5"
+                  : "px-3 py-1.5 rounded-md text-sm font-medium text-slate-400 hover:text-slate-200 transition-colors flex items-center gap-1.5"
+              }
             >
-              <Users size={14} /> Friends
+              <Users size={13} /> Friends
             </button>
           </div>
         </div>
 
-        {loading && <p className="text-zinc-600 text-sm">Loading...</p>}
+        {loading && <p className="text-slate-500 text-sm">Loading...</p>}
         {!loading && users.length === 0 && scope === "friends" && (
-          <p className="text-zinc-600 text-sm">Add some friends to see them here.</p>
+          <p className="text-slate-500 text-sm">Add some friends to see them here.</p>
         )}
         {!loading && users.length === 0 && scope === "global" && (
-          <p className="text-zinc-600 text-sm">No players yet. Be the first!</p>
+          <p className="text-slate-500 text-sm">No players yet. Be the first!</p>
         )}
 
         <div className="space-y-2">
@@ -107,45 +115,45 @@ export default function LeaderboardPage() {
             return (
               <div
                 key={user.id}
-                className={`flex items-center gap-3 rounded-xl border p-3 backdrop-blur-md ${
+                className={
                   rank === 1
-                    ? "border-yellow-500/50 bg-gradient-to-r from-yellow-500/10 to-transparent"
+                    ? "flex items-center gap-3 rounded-xl border p-3 border-amber-700/40 bg-amber-950/10"
                     : rank === 2
-                    ? "border-zinc-400/40 bg-gradient-to-r from-zinc-400/10 to-transparent"
+                    ? "flex items-center gap-3 rounded-xl border p-3 border-slate-600/40 bg-slate-800/20"
                     : rank === 3
-                    ? "border-orange-600/40 bg-gradient-to-r from-orange-600/10 to-transparent"
-                    : "border-zinc-800 bg-zinc-900/50"
-                }`}
+                    ? "flex items-center gap-3 rounded-xl border p-3 border-orange-800/40 bg-orange-950/10"
+                    : "flex items-center gap-3 rounded-xl border p-3 border-slate-800 bg-slate-900/60"
+                }
               >
                 <span className="w-6 flex justify-center">
-                  {rank === 1 && <Crown className="text-yellow-400" size={18} />}
-                  {rank === 2 && <Medal className="text-zinc-300" size={18} />}
-                  {rank === 3 && <Medal className="text-orange-500" size={18} />}
-                  {rank > 3 && <span className="text-zinc-500 font-mono">{rank}</span>}
+                  {rank === 1 && <Crown className="text-amber-400" size={17} />}
+                  {rank === 2 && <Medal className="text-slate-300" size={17} />}
+                  {rank === 3 && <Medal className="text-orange-500" size={17} />}
+                  {rank > 3 && <span className="text-slate-500 font-mono text-sm">{rank}</span>}
                 </span>
 
                 <Avatar>
                   <AvatarImage src={user.imageUrl ?? undefined} />
-                  <AvatarFallback className="bg-zinc-800 text-zinc-300">
+                  <AvatarFallback className="bg-slate-800 text-slate-300">
                     {(user.name ?? "?").charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
 
-                <span className="flex-1 font-medium truncate text-zinc-100">
+                <span className="flex-1 font-medium truncate text-slate-100">
                   {user.name ?? "Anonymous"}
                 </span>
 
                 {user.trophiesCount > 0 && (
-                  <span className="flex items-center gap-1 text-xs text-yellow-400">
+                  <span className="flex items-center gap-1 text-xs text-amber-400">
                     <Trophy size={12} /> {user.trophiesCount}
                   </span>
                 )}
 
-                <Badge className="bg-zinc-800 text-zinc-300 border-zinc-700">
+                <Badge className="bg-slate-800 text-slate-300 border-slate-700">
                   Lvl {user.level}
                 </Badge>
 
-                <span className="font-mono text-sm font-bold text-purple-400 w-20 text-right">
+                <span className="font-mono text-sm font-medium text-indigo-400 w-20 text-right">
                   {score} XP
                 </span>
               </div>
@@ -176,5 +184,5 @@ function ResetCountdown({ resetsAt }: { resetsAt: string }) {
     return () => clearInterval(interval)
   }, [resetsAt])
 
-  return <span className="text-xs text-zinc-500 font-mono">{label}</span>
+  return <span className="text-xs text-slate-500 font-mono">{label}</span>
 }

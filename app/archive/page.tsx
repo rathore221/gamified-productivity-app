@@ -97,15 +97,14 @@ export default function ArchivePage() {
   }, [filteredAndSorted, sortMode])
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+    <div className="min-h-screen bg-slate-950 text-slate-100">
       <div className="max-w-2xl mx-auto p-6 space-y-6">
-        <h1 className="text-2xl font-black tracking-wide flex items-center gap-2">
-          <Archive className="text-purple-400" size={24} />
+        <h1 className="text-xl font-semibold tracking-tight flex items-center gap-2">
+          <Archive className="text-indigo-400" size={22} />
           Archive
         </h1>
 
-        {/* Stats card */}
-        <div className="rounded-2xl border border-zinc-800 bg-zinc-900/50 backdrop-blur-md p-4 space-y-4">
+        <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4 space-y-4">
           <div className="flex items-center gap-2 flex-wrap">
             {RANGE_OPTIONS.map((opt) => (
               <button
@@ -113,8 +112,8 @@ export default function ArchivePage() {
                 onClick={() => setRange(opt.key)}
                 className={
                   range === opt.key
-                    ? "px-3 py-1.5 rounded-full text-xs font-bold bg-purple-600 text-white shadow-[0_0_10px_rgba(168,85,247,0.4)] transition-all"
-                    : "px-3 py-1.5 rounded-full text-xs font-bold bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200 transition-all"
+                    ? "px-3 py-1.5 rounded-full text-xs font-medium bg-indigo-600 text-white transition-colors"
+                    : "px-3 py-1.5 rounded-full text-xs font-medium bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-slate-200 transition-colors"
                 }
               >
                 {opt.label}
@@ -123,20 +122,20 @@ export default function ArchivePage() {
           </div>
 
           <div className="grid grid-cols-3 gap-3">
-            <div className="rounded-xl bg-zinc-950/60 border border-zinc-800 p-3 text-center">
-              <ListChecks size={16} className="text-emerald-400 mx-auto mb-1.5" />
-              <p className="text-[10px] text-zinc-500 uppercase tracking-wide">Tasks</p>
-              <p className="text-lg font-bold text-white">{stats.totalTasks}</p>
+            <div className="rounded-lg bg-slate-950/60 border border-slate-800 p-3 text-center">
+              <ListChecks size={15} className="text-emerald-400 mx-auto mb-1.5" />
+              <p className="text-[10px] text-slate-500 uppercase tracking-wide">Tasks</p>
+              <p className="text-base font-semibold text-white">{stats.totalTasks}</p>
             </div>
-            <div className="rounded-xl bg-zinc-950/60 border border-zinc-800 p-3 text-center">
-              <TrendingUp size={16} className="text-purple-400 mx-auto mb-1.5" />
-              <p className="text-[10px] text-zinc-500 uppercase tracking-wide">XP Earned</p>
-              <p className="text-lg font-bold text-white">{stats.totalXp}</p>
+            <div className="rounded-lg bg-slate-950/60 border border-slate-800 p-3 text-center">
+              <TrendingUp size={15} className="text-indigo-400 mx-auto mb-1.5" />
+              <p className="text-[10px] text-slate-500 uppercase tracking-wide">XP Earned</p>
+              <p className="text-base font-semibold text-white">{stats.totalXp}</p>
             </div>
-            <div className="rounded-xl bg-zinc-950/60 border border-zinc-800 p-3 text-center">
-              <Clock size={16} className="text-fuchsia-400 mx-auto mb-1.5" />
-              <p className="text-[10px] text-zinc-500 uppercase tracking-wide">Time Focused</p>
-              <p className="text-lg font-bold text-white">
+            <div className="rounded-lg bg-slate-950/60 border border-slate-800 p-3 text-center">
+              <Clock size={15} className="text-violet-400 mx-auto mb-1.5" />
+              <p className="text-[10px] text-slate-500 uppercase tracking-wide">Time Focused</p>
+              <p className="text-base font-semibold text-white">
                 {stats.totalMinutes >= 60
                   ? `${Math.floor(stats.totalMinutes / 60)}h ${stats.totalMinutes % 60}m`
                   : `${stats.totalMinutes}m`}
@@ -145,20 +144,19 @@ export default function ArchivePage() {
           </div>
         </div>
 
-        {/* Search + sort */}
-        <div className="rounded-2xl border border-zinc-800 bg-zinc-900/50 backdrop-blur-md p-4 space-y-3">
+        <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4 space-y-3">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" size={16} />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={15} />
             <Input
               placeholder="Search tasks by name..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="pl-9 bg-zinc-950 border-zinc-800 text-zinc-100 placeholder:text-zinc-600"
+              className="pl-9 bg-slate-950 border-slate-800 text-slate-100 placeholder:text-slate-600"
             />
           </div>
 
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="flex items-center gap-1.5 text-xs text-zinc-500 uppercase tracking-wider font-semibold">
+            <span className="flex items-center gap-1.5 text-xs text-slate-500 uppercase tracking-wide font-medium">
               <ArrowUpDown size={12} /> Sort
             </span>
             {[
@@ -172,8 +170,8 @@ export default function ArchivePage() {
                 onClick={() => setSortMode(opt.key as SortMode)}
                 className={
                   sortMode === opt.key
-                    ? "px-3 py-1 rounded-full text-xs font-bold bg-purple-600 text-white transition-colors"
-                    : "px-3 py-1 rounded-full text-xs font-bold bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200 transition-colors"
+                    ? "px-3 py-1 rounded-full text-xs font-medium bg-indigo-600 text-white transition-colors"
+                    : "px-3 py-1 rounded-full text-xs font-medium bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-slate-200 transition-colors"
                 }
               >
                 {opt.label}
@@ -182,12 +180,12 @@ export default function ArchivePage() {
           </div>
         </div>
 
-        {loading && <p className="text-zinc-600 text-sm">Loading...</p>}
+        {loading && <p className="text-slate-500 text-sm">Loading...</p>}
 
         {!loading && groupedByWeek.length === 0 && (
-          <div className="rounded-2xl border border-dashed border-zinc-800 py-16 text-center">
-            <Archive className="mx-auto mb-3 text-zinc-700" size={32} />
-            <p className="text-sm text-zinc-500 font-medium">
+          <div className="rounded-xl border border-dashed border-slate-800 py-16 text-center">
+            <Archive className="mx-auto mb-3 text-slate-700" size={28} />
+            <p className="text-sm text-slate-500 font-medium">
               {query ? "No tasks match your search" : "No completed tasks in this range"}
             </p>
           </div>
@@ -197,21 +195,21 @@ export default function ArchivePage() {
           {groupedByWeek.map(([weekKey, weekTasks]) => (
             <div key={weekKey} className="space-y-2">
               <div className="flex items-center justify-between px-1">
-                <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-500">
+                <h2 className="text-xs font-medium uppercase tracking-wide text-slate-500">
                   {formatWeekLabel(new Date(weekKey))}
                 </h2>
-                <span className="text-xs text-zinc-600">
+                <span className="text-xs text-slate-600">
                   {weekTasks.length} task{weekTasks.length !== 1 ? "s" : ""}
                 </span>
               </div>
 
-              <div className="rounded-2xl border border-zinc-800 bg-zinc-900/50 backdrop-blur-md divide-y divide-zinc-800/60 overflow-hidden">
+              <div className="rounded-xl border border-slate-800 bg-slate-900/60 divide-y divide-slate-800/60 overflow-hidden">
                 {weekTasks.map((task) => (
                   <div key={task.id} className="flex items-center gap-3 p-3">
-                    <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
+                    <CheckCircle2 size={15} className="text-emerald-400 shrink-0" />
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-zinc-100 truncate">{task.title}</p>
-                      <p className="text-xs text-zinc-500">
+                      <p className="text-sm font-medium text-slate-100 truncate">{task.title}</p>
+                      <p className="text-xs text-slate-500">
                         {Math.round(task.durationSec / 60)} min ·{" "}
                         {new Date(task.completedAt).toLocaleDateString(undefined, {
                           weekday: "short",
@@ -220,7 +218,7 @@ export default function ArchivePage() {
                         })}
                       </p>
                     </div>
-                    <span className="font-mono text-sm font-bold text-purple-400 shrink-0">
+                    <span className="font-mono text-sm font-medium text-indigo-400 shrink-0">
                       +{task.xpAwarded ?? 0} XP
                     </span>
                   </div>

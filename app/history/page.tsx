@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Badge } from "@/components/ui/badge"
 import { History, CheckCircle2, XCircle, Ban, Swords, Trophy, ChevronDown } from "lucide-react"
 
 interface TaskHistoryItem {
@@ -60,20 +59,20 @@ export default function HistoryPage() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100">
+    <div className="min-h-screen bg-slate-950 text-slate-100">
       <div className="max-w-2xl mx-auto p-6 space-y-6">
-        <h1 className="text-2xl font-black tracking-wide flex items-center gap-2">
-          <History className="text-purple-400" size={24} />
+        <h1 className="text-xl font-semibold tracking-tight flex items-center gap-2">
+          <History className="text-indigo-400" size={22} />
           History
         </h1>
 
-        <div className="flex gap-2 rounded-xl border border-zinc-800 bg-zinc-900/50 p-1 w-fit">
+        <div className="flex gap-1 rounded-lg border border-slate-800 bg-slate-900/60 p-1 w-fit">
           <button
             onClick={() => setTab("tasks")}
             className={
               tab === "tasks"
-                ? "px-4 py-1.5 rounded-lg text-sm font-bold bg-purple-600 text-white transition-colors"
-                : "px-4 py-1.5 rounded-lg text-sm font-bold text-zinc-400 hover:text-zinc-200 transition-colors"
+                ? "px-4 py-1.5 rounded-md text-sm font-medium bg-indigo-600 text-white transition-colors"
+                : "px-4 py-1.5 rounded-md text-sm font-medium text-slate-400 hover:text-slate-200 transition-colors"
             }
           >
             Tasks
@@ -82,38 +81,38 @@ export default function HistoryPage() {
             onClick={() => setTab("challenges")}
             className={
               tab === "challenges"
-                ? "px-4 py-1.5 rounded-lg text-sm font-bold bg-purple-600 text-white transition-colors"
-                : "px-4 py-1.5 rounded-lg text-sm font-bold text-zinc-400 hover:text-zinc-200 transition-colors"
+                ? "px-4 py-1.5 rounded-md text-sm font-medium bg-indigo-600 text-white transition-colors"
+                : "px-4 py-1.5 rounded-md text-sm font-medium text-slate-400 hover:text-slate-200 transition-colors"
             }
           >
             Duels
           </button>
         </div>
 
-        {loading && <p className="text-zinc-600 text-sm">Loading...</p>}
+        {loading && <p className="text-slate-500 text-sm">Loading...</p>}
 
         {!loading && tab === "tasks" && (
           <div className="space-y-2">
             {tasks.length === 0 && (
-              <p className="text-zinc-600 text-sm py-8 text-center">No completed tasks yet.</p>
+              <p className="text-slate-500 text-sm py-8 text-center">No completed tasks yet.</p>
             )}
             {tasks.map((task) => (
               <div
                 key={task.id}
-                className="flex items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-900/50 p-3"
+                className="flex items-center gap-3 rounded-xl border border-slate-800 bg-slate-900/60 p-3"
               >
-                {task.status === "COMPLETED" && <CheckCircle2 size={18} className="text-emerald-400 shrink-0" />}
-                {task.status === "FAILED" && <XCircle size={18} className="text-red-400 shrink-0" />}
-                {task.status === "CANCELLED" && <Ban size={18} className="text-zinc-500 shrink-0" />}
+                {task.status === "COMPLETED" && <CheckCircle2 size={17} className="text-emerald-400 shrink-0" />}
+                {task.status === "FAILED" && <XCircle size={17} className="text-red-400 shrink-0" />}
+                {task.status === "CANCELLED" && <Ban size={17} className="text-slate-500 shrink-0" />}
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-zinc-100 truncate">{task.title}</p>
-                  <p className="text-xs text-zinc-500">
+                  <p className="text-sm font-medium text-slate-100 truncate">{task.title}</p>
+                  <p className="text-xs text-slate-500">
                     {Math.round(task.durationSec / 60)} min ·{" "}
                     {task.completedAt ? new Date(task.completedAt).toLocaleDateString() : ""}
                   </p>
                 </div>
                 {task.xpAwarded !== null && task.xpAwarded > 0 && (
-                  <span className="font-mono text-sm font-bold text-purple-400 shrink-0">
+                  <span className="font-mono text-sm font-medium text-indigo-400 shrink-0">
                     +{task.xpAwarded} XP
                   </span>
                 )}
@@ -125,7 +124,7 @@ export default function HistoryPage() {
         {!loading && tab === "challenges" && (
           <div className="space-y-2">
             {challenges.length === 0 && (
-              <p className="text-zinc-600 text-sm py-8 text-center">No completed duels yet.</p>
+              <p className="text-slate-500 text-sm py-8 text-center">No completed duels yet.</p>
             )}
             {challenges.map((c) => {
               const opponent = c.challenger.id === myId ? c.opponent : c.challenger
@@ -138,24 +137,24 @@ export default function HistoryPage() {
                   key={c.id}
                   className={
                     won
-                      ? "rounded-xl border overflow-hidden border-yellow-500/40 bg-yellow-500/5"
-                      : "rounded-xl border overflow-hidden border-zinc-800 bg-zinc-900/50"
+                      ? "rounded-xl border overflow-hidden border-amber-700/40 bg-amber-950/10"
+                      : "rounded-xl border overflow-hidden border-slate-800 bg-slate-900/60"
                   }
                 >
                   <button
                     onClick={() => setExpandedId(expanded ? null : c.id)}
-                    className="w-full flex items-center gap-3 p-3 text-left hover:bg-zinc-800/30 transition-colors"
+                    className="w-full flex items-center gap-3 p-3 text-left hover:bg-slate-800/30 transition-colors"
                   >
                     {won ? (
-                      <Trophy size={18} className="text-yellow-400 shrink-0" />
+                      <Trophy size={17} className="text-amber-400 shrink-0" />
                     ) : (
-                      <Swords size={18} className="text-zinc-500 shrink-0" />
+                      <Swords size={17} className="text-slate-500 shrink-0" />
                     )}
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-zinc-100 truncate">
+                      <p className="text-sm font-medium text-slate-100 truncate">
                         vs {opponent.name ?? "Anonymous"} · {c.category}
                       </p>
-                      <p className="text-xs text-zinc-500">
+                      <p className="text-xs text-slate-500">
                         {c.status === "DECLINED"
                           ? "Declined"
                           : c.status === "SURRENDERED"
@@ -171,38 +170,38 @@ export default function HistoryPage() {
                       <span
                         className={
                           won
-                            ? "font-mono text-sm font-bold shrink-0 text-emerald-400"
+                            ? "font-mono text-sm font-medium shrink-0 text-emerald-400"
                             : lost
-                            ? "font-mono text-sm font-bold shrink-0 text-red-400"
-                            : "font-mono text-sm font-bold shrink-0 text-zinc-500"
+                            ? "font-mono text-sm font-medium shrink-0 text-red-400"
+                            : "font-mono text-sm font-medium shrink-0 text-slate-500"
                         }
                       >
                         {won ? "+" : lost ? "-" : ""}{c.wagerXP} XP
                       </span>
                     )}
                     <ChevronDown
-                      size={16}
+                      size={15}
                       className={
                         expanded
-                          ? "text-zinc-400 rotate-180 transition-transform shrink-0"
-                          : "text-zinc-500 transition-transform shrink-0"
+                          ? "text-slate-400 rotate-180 transition-transform shrink-0"
+                          : "text-slate-500 transition-transform shrink-0"
                       }
                     />
                   </button>
 
                   {expanded && (
-                    <div className="border-t border-zinc-800 bg-zinc-950/50 p-3 space-y-1.5">
+                    <div className="border-t border-slate-800 bg-slate-950/50 p-3 space-y-1.5">
                       {c.tasks.length === 0 && (
-                        <p className="text-xs text-zinc-600 py-1">No tasks were logged toward this duel.</p>
+                        <p className="text-xs text-slate-600 py-1">No tasks were logged toward this duel.</p>
                       )}
                       {c.tasks.map((task) => (
                         <div key={task.id} className="flex items-center gap-2 text-xs">
                           <CheckCircle2 size={12} className="text-emerald-400 shrink-0" />
-                          <span className="flex-1 text-zinc-300 truncate">{task.title}</span>
-                          <span className="text-zinc-600">
+                          <span className="flex-1 text-slate-300 truncate">{task.title}</span>
+                          <span className="text-slate-600">
                             {task.userId === myId ? "You" : opponent.name ?? "Opponent"}
                           </span>
-                          <span className="font-mono text-purple-400 font-bold">
+                          <span className="font-mono text-indigo-400 font-medium">
                             +{task.xpAwarded ?? 0}
                           </span>
                         </div>
