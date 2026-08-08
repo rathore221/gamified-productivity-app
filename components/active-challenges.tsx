@@ -28,6 +28,8 @@ interface ActiveChallengesProps {
   refreshSignal?: number
 }
 
+const POLL_INTERVAL_MS = 10000
+
 export function ActiveChallenges({ myId, refreshSignal }: ActiveChallengesProps) {
   const [pending, setPending] = useState<Challenge[]>([])
   const [active, setActive] = useState<Challenge[]>([])
@@ -36,6 +38,19 @@ export function ActiveChallenges({ myId, refreshSignal }: ActiveChallengesProps)
     load()
   }, [refreshSignal])
 
+  useEffect(() => {
+    const interval = setInterval(load, POLL_INTERVAL_MS)
+    return () => clearInterval(interval)
+  }, [])
+
+  useEffect(() => {
+    function handleFocus() {
+      load()
+    }
+    window.addEventListener("focus", handleFocus)
+    return () => window.removeEventListener("focus", handleFocus)
+  }, [])
+
   function load() {
     fetch("/api/challenges/active")
       .then((r) => r.json())
@@ -43,6 +58,7 @@ export function ActiveChallenges({ myId, refreshSignal }: ActiveChallengesProps)
         setPending(data.pending ?? [])
         setActive(data.active ?? [])
       })
+      .catch(() => {})
   }
 
   async function respond(challengeId: string, status: "ACCEPTED" | "DECLINED") {
@@ -117,7 +133,7 @@ export function ActiveChallenges({ myId, refreshSignal }: ActiveChallengesProps)
             </div>
             <p className="text-xs text-zinc-500">{c.category}</p>
             <div className="h-2 w-full rounded-full bg-zinc-800 overflow-hidden flex">
-              <div className="h-full bg-purple-500" style={{ width: `${myPercent}%` }} />
+              <div className="h-full bg-purple-500 transition-all duration-500" style={{ width: `${myPercent}%` }} />
               <div className="h-full bg-zinc-600 flex-1" />
             </div>
             <div className="flex justify-between text-xs font-mono text-zinc-400">
