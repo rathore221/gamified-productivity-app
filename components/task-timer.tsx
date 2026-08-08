@@ -40,7 +40,7 @@ export function TaskTimer({ taskId, title, durationSec, initialTimeLeft, onResol
       const data = await res.json()
       setXpAwarded(data.xpAwarded ?? 0)
       setPhase("success")
-      toast.success(`+${data.xpAwarded} XP! "${title}" complete 🔥`)
+      toast.success(`+${data.xpAwarded} XP — "${title}" complete`)
       setTimeout(() => onResolved(taskId, data.xpAwarded ?? 0), 1400)
     } catch {
       toast.error("Something went wrong syncing your task.")
@@ -66,11 +66,11 @@ export function TaskTimer({ taskId, title, durationSec, initialTimeLeft, onResol
 
   if (phase === "success") {
     return (
-      <div className="rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-5 flex items-center gap-3">
-        <CheckCircle2 className="text-emerald-400" size={24} />
+      <div className="rounded-xl border border-emerald-800/50 bg-emerald-950/30 p-5 flex items-center gap-3">
+        <CheckCircle2 className="text-emerald-400" size={22} />
         <div>
-          <p className="font-bold text-emerald-300">{title} complete!</p>
-          <p className="text-sm text-emerald-400/80">+{xpAwarded} XP earned</p>
+          <p className="font-medium text-emerald-300">{title} complete</p>
+          <p className="text-sm text-emerald-400/70">+{xpAwarded} XP earned</p>
         </div>
       </div>
     )
@@ -78,7 +78,7 @@ export function TaskTimer({ taskId, title, durationSec, initialTimeLeft, onResol
 
   if (phase === "cancelled") {
     return (
-      <div className="rounded-2xl border border-zinc-800 bg-zinc-900/30 p-5 text-zinc-600">
+      <div className="rounded-xl border border-slate-800 bg-slate-900/30 p-5 text-slate-600">
         Task cancelled.
       </div>
     )
@@ -86,31 +86,35 @@ export function TaskTimer({ taskId, title, durationSec, initialTimeLeft, onResol
 
   return (
     <div
-      className={`rounded-2xl border p-5 space-y-4 backdrop-blur-md transition-colors ${
-        isUrgent ? "border-red-500/50 bg-red-500/5" : "border-zinc-800 bg-zinc-900/50"
-      }`}
+      className={
+        isUrgent
+          ? "rounded-xl border p-5 space-y-4 transition-colors border-red-900/50 bg-red-950/20"
+          : "rounded-xl border p-5 space-y-4 transition-colors border-slate-800 bg-slate-900/60"
+      }
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <TimerIcon size={16} className="text-zinc-500" />
-          <h3 className="font-semibold text-zinc-100">{title}</h3>
+          <TimerIcon size={15} className="text-slate-500" />
+          <h3 className="font-medium text-slate-100">{title}</h3>
         </div>
         <span
-          className={`text-3xl font-black font-mono tabular-nums tracking-wider ${
-            isUrgent ? "text-red-400 animate-pulse" : "text-zinc-100"
-          }`}
+          className={
+            isUrgent
+              ? "text-2xl font-semibold font-mono tabular-nums text-red-400"
+              : "text-2xl font-semibold font-mono tabular-nums text-slate-100"
+          }
         >
           {minutes}:{String(seconds).padStart(2, "0")}
         </span>
       </div>
 
-      <div className="h-2.5 w-full rounded-full bg-zinc-800 overflow-hidden">
+      <div className="h-1.5 w-full rounded-full bg-slate-800 overflow-hidden">
         <div
-          className={`h-full rounded-full transition-all duration-1000 ${
+          className={
             isUrgent
-              ? "bg-red-500 shadow-[0_0_10px_2px_rgba(239,68,68,0.6)]"
-              : "bg-gradient-to-r from-purple-500 to-fuchsia-400 shadow-[0_0_10px_2px_rgba(168,85,247,0.5)]"
-          }`}
+              ? "h-full rounded-full transition-all duration-1000 bg-red-500"
+              : "h-full rounded-full transition-all duration-1000 bg-indigo-500"
+          }
           style={{ width: `${percentLeft}%` }}
         />
       </div>
@@ -118,9 +122,9 @@ export function TaskTimer({ taskId, title, durationSec, initialTimeLeft, onResol
       <Button
         onClick={handleCancel}
         variant="outline"
-        className="w-full border-zinc-700 text-zinc-400 hover:bg-zinc-800 hover:text-red-400"
+        className="w-full border-slate-700 text-slate-400 hover:bg-slate-800 hover:text-red-400"
       >
-        <X size={16} className="mr-1" />
+        <X size={15} className="mr-1" />
         Cancel Task
       </Button>
     </div>
