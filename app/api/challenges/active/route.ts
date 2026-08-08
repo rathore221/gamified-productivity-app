@@ -18,6 +18,11 @@ export async function GET() {
       challenger: { select: { id: true, name: true, imageUrl: true } },
       opponent: { select: { id: true, name: true, imageUrl: true } },
       winner: { select: { id: true, name: true } },
+      tasks: {
+        where: { status: "COMPLETED" },
+        select: { id: true, title: true, xpAwarded: true, userId: true, completedAt: true },
+        orderBy: { completedAt: "asc" },
+      },
     },
     orderBy: { createdAt: "desc" },
   })
