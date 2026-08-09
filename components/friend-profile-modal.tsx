@@ -101,77 +101,77 @@ export function FriendProfileModal({ friendId, onClose, onRemoved }: FriendProfi
   }
 
   function duelOutcomeColor(duel: Duel) {
-    if (duel.status === "DECLINED") return "text-zinc-500"
-    if (!duel.winnerId) return "text-zinc-400"
+    if (duel.status === "DECLINED") return "text-slate-500"
+    if (!duel.winnerId) return "text-slate-400"
     return duel.winnerId === myId ? "text-emerald-400" : "text-red-400"
   }
 
   return (
     <Dialog open={!!friendId} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="bg-zinc-950 border-zinc-800 text-zinc-100 max-w-md max-h-[85vh] overflow-y-auto">
+      <DialogContent className="bg-slate-950 border-slate-800 text-slate-100 max-w-md max-h-[85vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-zinc-100">Player Profile</DialogTitle>
+          <DialogTitle className="text-slate-100 font-medium">Player Profile</DialogTitle>
         </DialogHeader>
 
-        {loading && <p className="text-sm text-zinc-600 py-6 text-center">Loading...</p>}
+        {loading && <p className="text-sm text-slate-500 py-6 text-center">Loading...</p>}
 
         {!loading && friend && (
           <div className="space-y-5 pt-2">
             <div className="flex items-center gap-3">
               <Avatar className="h-14 w-14">
                 <AvatarImage src={friend.imageUrl ?? undefined} />
-                <AvatarFallback className="bg-zinc-800 text-zinc-300 text-lg">
+                <AvatarFallback className="bg-slate-800 text-slate-300 text-lg">
                   {(friend.name ?? "?").charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
               <div>
-                <p className="font-bold text-lg text-zinc-100">{friend.name ?? "Anonymous"}</p>
-                <p className="text-sm text-zinc-500">Level {friend.level}</p>
+                <p className="font-semibold text-lg text-slate-100">{friend.name ?? "Anonymous"}</p>
+                <p className="text-sm text-slate-500">Level {friend.level}</p>
               </div>
             </div>
 
             <div className="grid grid-cols-3 gap-2">
-              <div className="rounded-xl bg-zinc-900/60 border border-zinc-800 p-3 text-center">
-                <Trophy size={14} className="text-yellow-400 mx-auto mb-1" />
-                <p className="text-[10px] text-zinc-500 uppercase tracking-wide">Lifetime</p>
-                <p className="text-sm font-bold text-white">{friend.xp} XP</p>
+              <div className="rounded-lg bg-slate-900/60 border border-slate-800 p-3 text-center">
+                <Trophy size={14} className="text-amber-400 mx-auto mb-1" />
+                <p className="text-[10px] text-slate-500 uppercase tracking-wide">Lifetime</p>
+                <p className="text-sm font-semibold text-white">{friend.xp} XP</p>
               </div>
-              <div className="rounded-xl bg-zinc-900/60 border border-zinc-800 p-3 text-center">
+              <div className="rounded-lg bg-slate-900/60 border border-slate-800 p-3 text-center">
                 <Calendar size={14} className="text-emerald-400 mx-auto mb-1" />
-                <p className="text-[10px] text-zinc-500 uppercase tracking-wide">This Week</p>
-                <p className="text-sm font-bold text-white">{friend.weeklyXp} XP</p>
+                <p className="text-[10px] text-slate-500 uppercase tracking-wide">This Week</p>
+                <p className="text-sm font-semibold text-white">{friend.weeklyXp} XP</p>
               </div>
-              <div className="rounded-xl bg-zinc-900/60 border border-zinc-800 p-3 text-center">
-                <Award size={14} className="text-purple-400 mx-auto mb-1" />
-                <p className="text-[10px] text-zinc-500 uppercase tracking-wide">Trophies</p>
-                <p className="text-sm font-bold text-white">{friend.trophiesCount}</p>
+              <div className="rounded-lg bg-slate-900/60 border border-slate-800 p-3 text-center">
+                <Award size={14} className="text-indigo-400 mx-auto mb-1" />
+                <p className="text-[10px] text-slate-500 uppercase tracking-wide">Trophies</p>
+                <p className="text-sm font-semibold text-white">{friend.trophiesCount}</p>
               </div>
             </div>
 
             {allTimeRecord && allTimeRecord.total > 0 && (
-              <div className="rounded-xl border border-zinc-800 bg-zinc-900/60 p-3 space-y-1.5">
-                <p className="text-xs font-bold uppercase tracking-wider text-zinc-500 flex items-center gap-1.5">
+              <div className="rounded-lg border border-slate-800 bg-slate-900/60 p-3 space-y-1.5">
+                <p className="text-xs font-medium uppercase tracking-wide text-slate-500 flex items-center gap-1.5">
                   <Swords size={12} /> All-time duel record
                 </p>
                 <div className="flex gap-4 text-sm">
-                  <span className="text-emerald-400 font-bold">{allTimeRecord.wins}W</span>
-                  <span className="text-red-400 font-bold">{allTimeRecord.losses}L</span>
-                  {allTimeRecord.ties > 0 && <span className="text-zinc-500 font-bold">{allTimeRecord.ties}T</span>}
-                  <span className="text-zinc-600">across {allTimeRecord.total} duels</span>
+                  <span className="text-emerald-400 font-medium">{allTimeRecord.wins}W</span>
+                  <span className="text-red-400 font-medium">{allTimeRecord.losses}L</span>
+                  {allTimeRecord.ties > 0 && <span className="text-slate-500 font-medium">{allTimeRecord.ties}T</span>}
+                  <span className="text-slate-600">across {allTimeRecord.total} duels</span>
                 </div>
               </div>
             )}
 
             {h2hRecord && h2hRecord.total > 0 && (
-              <div className="rounded-xl border border-zinc-800 bg-zinc-900/60 p-3 space-y-3">
+              <div className="rounded-lg border border-slate-800 bg-slate-900/60 p-3 space-y-3">
                 <div className="flex items-center justify-between">
-                  <p className="text-xs font-bold uppercase tracking-wider text-zinc-500 flex items-center gap-1.5">
+                  <p className="text-xs font-medium uppercase tracking-wide text-slate-500 flex items-center gap-1.5">
                     <Swords size={12} /> Duel history vs you
                   </p>
                   <div className="flex gap-3 text-sm">
-                    <span className="text-emerald-400 font-bold">{h2hRecord.wins}W</span>
-                    <span className="text-red-400 font-bold">{h2hRecord.losses}L</span>
-                    {h2hRecord.ties > 0 && <span className="text-zinc-500 font-bold">{h2hRecord.ties}T</span>}
+                    <span className="text-emerald-400 font-medium">{h2hRecord.wins}W</span>
+                    <span className="text-red-400 font-medium">{h2hRecord.losses}L</span>
+                    {h2hRecord.ties > 0 && <span className="text-slate-500 font-medium">{h2hRecord.ties}T</span>}
                   </div>
                 </div>
 
@@ -179,37 +179,41 @@ export function FriendProfileModal({ friendId, onClose, onRemoved }: FriendProfi
                   {duels.map((duel) => {
                     const expanded = expandedDuelId === duel.id
                     return (
-                      <div key={duel.id} className="rounded-lg border border-zinc-800 overflow-hidden">
+                      <div key={duel.id} className="rounded-lg border border-slate-800 overflow-hidden">
                         <button
                           onClick={() => setExpandedDuelId(expanded ? null : duel.id)}
-                          className="w-full flex items-center justify-between p-2.5 hover:bg-zinc-800/40 transition-colors"
+                          className="w-full flex items-center justify-between p-2.5 hover:bg-slate-800/40 transition-colors"
                         >
                           <div className="text-left">
-                            <p className="text-sm font-medium text-zinc-200">{duel.category}</p>
-                            <p className={`text-xs font-semibold ${duelOutcomeColor(duel)}`}>
+                            <p className="text-sm font-medium text-slate-200">{duel.category}</p>
+                            <p className={`text-xs font-medium ${duelOutcomeColor(duel)}`}>
                               {duelOutcomeLabel(duel)}
                               {duel.status !== "DECLINED" && ` · ${duel.wagerXP} XP`}
                             </p>
                           </div>
                           <ChevronDown
-                            size={16}
-                            className={`text-zinc-500 transition-transform ${expanded ? "rotate-180" : ""}`}
+                            size={15}
+                            className={
+                              expanded
+                                ? "text-slate-400 rotate-180 transition-transform shrink-0"
+                                : "text-slate-500 transition-transform shrink-0"
+                            }
                           />
                         </button>
 
                         {expanded && (
-                          <div className="border-t border-zinc-800 bg-zinc-950/50 p-2.5 space-y-1.5">
+                          <div className="border-t border-slate-800 bg-slate-950/50 p-2.5 space-y-1.5">
                             {duel.tasks.length === 0 && (
-                              <p className="text-xs text-zinc-600 py-1">No tasks were logged toward this duel.</p>
+                              <p className="text-xs text-slate-600 py-1">No tasks were logged toward this duel.</p>
                             )}
                             {duel.tasks.map((task) => (
                               <div key={task.id} className="flex items-center gap-2 text-xs">
                                 <CheckCircle2 size={12} className="text-emerald-400 shrink-0" />
-                                <span className="flex-1 text-zinc-300 truncate">{task.title}</span>
-                                <span className="text-zinc-600">
+                                <span className="flex-1 text-slate-300 truncate">{task.title}</span>
+                                <span className="text-slate-600">
                                   {task.userId === myId ? "You" : friend.name ?? "Friend"}
                                 </span>
-                                <span className="font-mono text-purple-400 font-bold">
+                                <span className="font-mono text-indigo-400 font-medium">
                                   +{task.xpAwarded ?? 0}
                                 </span>
                               </div>
