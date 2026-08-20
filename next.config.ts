@@ -1,8 +1,14 @@
-// next.config.ts
 import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
-  serverExternalPackages: ["@prisma/client", "pg"],
+  async rewrites() {
+    return [
+      {
+        source: "/__clerk/:path*",
+        destination: "https://frontend-api.clerk.dev/:path*",
+      },
+    ]
+  },
 }
 
 export default nextConfig
